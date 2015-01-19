@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" charset="EUC-KR">
+<title>Welcome to ChatApp</title>
+<script type="text/javascript">
+			var ws = new WebSocket("ws://localhost:8080/ChatAppFinal/chatroomServerEndpoint");
+			ws.onmessage = function processMessage(message) {
+				var jsonData = JSON.parse(message.data);
+				if (jsonData.message != null) messagesTextArea.value += jsonData.message + "\n";
+			}
+			function sendMessage() {
+				ws.send(messageText.value);
+				messageText.value = "";
+			}
+			function enterChatRoom() {
+				ws.send(userName.value);
+			}
+			function leaveChatRoom() {
+				ws.send(" has left the chat room.");
+				window.location.replace("http://www.google.com")
+			}
+</script>
+</head>
+<body>
+		<input type="text" id="userName" size="20">
+		<input type="button" value="Enter with your name" onclick="enterChatRoom();"><br/>
+		<textarea id="messagesTextArea" readonly="readonly" rows="20" cols="60"></textarea><br/>
+		<input type="text" id="messageText" size="60"><input type="button" value="Send" onclick="sendMessage();">
+		<input type="button" value="Leave" onclick="leaveChatRoom();">
+</body>
+</html>
